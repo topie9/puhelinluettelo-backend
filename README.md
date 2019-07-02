@@ -1,2 +1,2 @@
 Herokuapp location:
-https://calm-chamber-46090.herokuapp.com/api/persons
+https://calm-chamber-46090.herokuapp.com/

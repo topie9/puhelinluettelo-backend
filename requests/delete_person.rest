@@ -1,1 +1,1 @@
-delete http://localhost:3001/api/persons/1
+delete https://calm-chamber-46090.herokuapp.com/api/persons/1
