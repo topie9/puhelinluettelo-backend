@@ -11,40 +11,40 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // morgan token for req content body
-morgan.token('content', (req, res) => {
+morgan.token('content', (req) => {
   return JSON.stringify(req.body)
 })
 // Log all but 'POST'
 app.use(morgan('tiny', {
-  skip: (req, res) => (req.method === "POST")
+  skip: (req) => (req.method === 'POST')
 }))
 // Log 'POST' with content body
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content' , {
-  skip: (req, res) => (req.method !== "POST")
+  skip: (req) => (req.method !== 'POST')
 }))
-
+/*
 let persons = [
   {
-    "name": "Arto Hellas",
-    "number": "040-123456",
-    "id": 1
+    'name': 'Arto Hellas',
+    'number': '040-123456',
+    'id': 1
   },
   {
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523",
-    "id": 2
+    'name': 'Ada Lovelace',
+    'number': '39-44-5323523',
+    'id': 2
   },
   {
-    "name": "Dan Abramov",
-    "number": "12-43-234345",
-    "id": 3
+    'name': 'Dan Abramov',
+    'number': '12-43-234345',
+    'id': 3
   },
   {
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122",
-    "id": 4
+    'name': 'Mary Poppendieck',
+    'number': '39-23-6423122',
+    'id': 4
   }
-]
+]*/
 
 // Get all persons
 app.get('/api/persons', (req, res) => {
@@ -69,7 +69,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 // Delete person
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
@@ -78,7 +78,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
 // Add new person
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
-  
+
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -87,7 +87,7 @@ app.post('/api/persons', (req, res, next) => {
   person.save().then(savedPerson => {
     res.json(savedPerson.toJSON())
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 // Update person's number
@@ -124,13 +124,13 @@ app.get('/info', (req, res) => {
 const errorHandler = (err, req, res, next) => {
   console.error(err.message)
 
-  if (err.name === 'CastError' && err.kind == 'ObjectId') {
+  if (err.name === 'CastError' && err.kind === 'ObjectId') {
     return res.status(400).send({ error: 'malformatted id' })
   } else if (err.name === 'ValidationError') {
-    return res.status(400).json({ error: err.message})
+    return res.status(400).json({ error: err.message })
   }
 
-  next(error)
+  next(err)
 }
 
 app.use(errorHandler)
